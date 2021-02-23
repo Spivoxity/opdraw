@@ -1,3 +1,6 @@
+(* optree.ml *)
+(* Copyright (c) 2021 J. M. Spivey *)
+
 type spec = Auto | Dir of string
 
 type tree = 

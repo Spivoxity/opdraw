@@ -21,3 +21,37 @@ The stages of conversion are as follows:
 5. Use imagemagick to convert the PDF file into a PNG.
 
 The final stage, converting from PDF to PNG, requires PDF reading to be enabled in Imagemagick.  As root, edit the file `/etc/Imagemagick/policy.xml` and delete a group of lines near the bottom of the file that prevent the use of Ghostscript to decode images, leaving the closing tag on the very last line.  Those lines are there because of a bug in earlier versions of Ghostscript that has apparently been fixed now.
+
+## Files
+For the OP --> MP translation
+````
+opgram.mly      Parser for operator trees        
+oplex.mll       Lexer for the operator tree language
+optree.ml       Abstract syntax for operator trees
+opmain.ml       Everything else
+print.ml        Mike's own version of printf
+print.mli       Interface definition for printf
+util.ml         Utility functions
+````
+For the MP to Postscript stage
+````
+opdraw.mp       Metapost macros
+opdraw.tex      Tex macros used for embedded labels
+cmcsci10.tfm    TeX font metrics for italic small caps
+````
+Program for translating MP output into pdfTeX input
+````
+mp2parse.y      Yacc parser and main program
+mp2scan.l       Lexer
+````
+For rendering the resulting TeX as PDF
+````
+opdraw2.tex     pdfTeX settings
+````
+Bits and pieces
+````
+Makefile
+README.md
+sample.op
+script
+````

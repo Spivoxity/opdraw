@@ -1,4 +1,5 @@
-# tools/Makefile 
+# opdraw/Makefile
+# Copyright (c) 2021 J. M. Spivey
 
 all: opdraw mp2pdf
 
@@ -36,7 +37,7 @@ mp2scan.o mp2parse.o: mp2parse.h
 clean: force
 	rm -f opdraw *.cmi *.cmo oplex.ml opgram.mli opgram.ml
 	rm -f mp2pdf *.o mp2parse.c mp2parse.h mp2scan.c
-	rm -f *.pdf *.1 *.log *.mpx *.mtx *.png sample.tex
+	rm -f *.pdf *.1 *.log *.mpx *.mtx *.png sample.tex sample.mp
 
 force:
 

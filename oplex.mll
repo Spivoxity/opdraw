@@ -1,3 +1,6 @@
+(* oplex.mll *)
+(* Copyright (c) 2021 J. M. Spivey *)
+
 {
 open Opgram
 open Print

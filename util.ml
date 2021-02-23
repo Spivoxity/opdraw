@@ -1,4 +1,5 @@
-(* ppc/util.ml *)
+(* /util.ml *)
+(* Copyright (c) 2021 J. M. Spivey *)
 
 (* |copy n x = [x; x; ...; x]| with |n| copies of |x| *)
 let rec copy n x = if n <= 0 then [] else x :: copy (n-1) x

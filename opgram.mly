@@ -1,3 +1,6 @@
+/* opgram.mly */
+/* Copyright (c) 2021 J. M. Spivey */
+
 %{
 open Optree
 open Print

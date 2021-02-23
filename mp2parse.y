@@ -1,4 +1,5 @@
 /* parser.mly */
+/* Copyright (c) 2021 J. M. Spivey */
 
 %{
 #define YYDEBUG 1

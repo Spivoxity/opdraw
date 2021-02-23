@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# opdraw/script
+# Copyright (c) 2021 J. M. Spivey
+
 density=300;                    # Pixels per inch for PNG output
 colour=-c;                      # Use -c to colour the ovals
 

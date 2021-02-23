@@ -1,4 +1,5 @@
-% optrees.mp
+% opdraw.mp
+% Copyright (c) 2021 J. M. Spivey
 
 numeric gridx, gridy; gridx = gridy = 36pt;
 numeric odx, ody; odx = 6pt; ody = 12pt;

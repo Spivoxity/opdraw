@@ -1,3 +1,6 @@
+(* opmain.ml *)
+(* Copyright (c) 2021 J. M. Spivey *)
+
 open Print
 open Optree
 

@@ -1,3 +1,6 @@
+/* mp2scan.l */
+/* Copyright (c) 2021 J. M. Spivey */
+
 %{
 #include "mp2parse.h"
 

@@ -1,4 +1,5 @@
-(* common/print.mli *)
+(* print.mli *)
+(* Copyright (c) 2021 J. M. Spivey *)
 
 type arg
 
