@@ -58,44 +58,44 @@ vardef chain(expr x)(text txt) =
 enddef;
 
 vardef inst.lft(expr n)(text txt) =
-  label.lft(txt, z.a[n]l)
+  label.lft(txt, z.a[n]l);
 enddef;
 
 vardef inst.rt(expr n)(text txt) =
-  label.rt(txt, z.a[n]r)
+  label.rt(txt, z.a[n]r);
 enddef;
 
 vardef inst.ulft(expr n)(text txt) =
-  label.ulft(txt, point 1/2 of oval(n))
+  label.ulft(txt, point 1/2 of oval(n));
 enddef;
 
 vardef inst.llft(expr n)(text txt) =
-  label.llft(txt, point 3/2 of oval(n))
+  label.llft(txt, point 3/2 of oval(n));
 enddef;
 
 vardef inst.lrt(expr n)(text txt) =
-  label.lrt(txt, point 5/2 of oval(n))
+  label.lrt(txt, point 5/2 of oval(n));
 enddef;
 
 vardef inst.urt(expr n)(text txt) =
-  label.urt(txt, point 7/2 of oval(n))
+  label.urt(txt, point 7/2 of oval(n));
 enddef;
 
 vardef reg.lft(expr n)(text txt) =
   dotlabeldiam := 4pt;
   if angle (direction 0 of lnk[n]) > -140:
-    makelabel.lft(txt, z[n])
+    makelabel.lft(txt, z[n]);
   else:
-    makelabel.ulft(txt, z[n])
+    makelabel.ulft(txt, z[n]);
   fi
 enddef;
 
 vardef reg.rt(expr n)(text txt) =
   dotlabeldiam := 4pt;
   if angle (direction 0 of lnk[n]) < -40:
-    makelabel.rt(txt, z[n])
+    makelabel.rt(txt, z[n]);
   else:
-    makelabel.urt(txt, z[n])
+    makelabel.urt(txt, z[n]);
   fi
 enddef;
 
