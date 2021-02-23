@@ -1,7 +1,7 @@
 # opdraw
 pdfTeX-based tool for rendering operator trees as PDF and PNG
 
-This program, written in OCaml with a helper in C, takes a file containing a compact representation of a tiled operator tree and renders it as a digram, with output as both a PDF file and a PNG file.  Operator trees are used in some compilers to represent statements in the body of a procedure, and instruction selection is implemented by covering each tree with tiles that correspond to machine instructions.
+This program, written in OCaml with a helper in C, takes a file containing a compact representation of a tiled operator tree and renders it as a diagram, with output as both a PDF file and a PNG file.  Operator trees are used in some compilers to represent statements in the body of a procedure, and instruction selection is implemented by covering each tree with tiles that correspond to machine instructions.
 
 <img src="sample.png" width=400/>
 
