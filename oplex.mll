@@ -9,8 +9,15 @@ open Optree
 let fname = ref "standard input"
 let lnum = ref 1
 
+(* |make_hash n [(x1, y1); ...]| creates a hash table of size |n|
+   that initially contains the pairs |(x1, y1)|, ... *)
+let make_hash n ps = 
+  let table = Hashtbl.create n in
+  List.iter (function (x, y) -> Hashtbl.add table x y) ps;
+  table
+
 let kwtable =
-  Util.make_hash 10 [ ("tile", TILE Auto);
+  make_hash 10 [ ("tile", TILE Auto);
     ("tile.ulft", TILE (Dir "ulft"));
     ("tile.urt", TILE (Dir "urt"));
     ("tile.llft", TILE (Dir "llft"));

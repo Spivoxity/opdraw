@@ -5,7 +5,7 @@ all: opdraw mp2pdf
 
 ## opdraw
 
-opdraw: util.cmo print.cmo optree.cmo oplex.cmo opgram.cmo opmain.cmo
+opdraw: print.cmo optree.cmo oplex.cmo opgram.cmo opmain.cmo
 	ocamlc -o $@ $^
 
 opgram.ml opgram.mli: opgram.mly
@@ -46,7 +46,7 @@ CFLAGS = -g
 
 ##
 
-oplex.cmo : opgram.cmi util.cmo
+oplex.cmo : opgram.cmi
 opgram.cmi : optree.cmo
 opgram.cmo : opgram.cmi optree.cmo
 print.cmo : print.cmi
