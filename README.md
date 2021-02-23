@@ -3,6 +3,8 @@ pdfTeX-based tool for rendering operator trees as PDF and PNG
 
 This program, written in OCaml with a helper in C, takes a file containing a compact representation of a tiled operator tree and renders it as a digram, with output as both a PDF file and a PNG file.  Operator trees are used in some compilers to represent statements in the body of a procedure, and instruction selection is implemented by covering each tree with tiles that correspond to machine instructions.
 
+<img src="sample.png" width=400/>
+
 To work, it needs both pdfTex (from TeX live) and imagemagick installed, and building it requires the OCaml compiler and also (for the helper) flex and bison.  Here's a suitable command to install the prerequisites under Debian:
 ````
 sudo apt-get install texlive texlive-metapost imagemagick ghostscript ocaml-nox flex bison
