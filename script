@@ -1,0 +1,21 @@
+#!/bin/bash
+
+density=300;                    # Pixels per inch for PNG output
+
+if [ $# -lt 1 ]; then echo Usage: opdraw file.op; exit 1; fi
+
+input=$1
+fname=$(basename $input .op)
+
+./opdraw $input >$fname.mp \
+         
+mpost $fname.mp
+
+./mp2pdf $fname.1 >$fname.mtx
+
+/bin/echo "\\input opdraw2 \\shipout\\vbox{\\input $fname.mtx } \\bye" \
+    >$fname.tex
+
+pdftex $fname.tex
+
+convert -density $density -colorspace RGB $fname.pdf -flatten $fname.png

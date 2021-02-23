@@ -1,0 +1,23 @@
+syntax: glob
+*.cmi
+*.cmo
+mp2parse.c
+mp2parse.h
+mp2parse.o
+mp2parse.output
+mp2pdf
+mp2scan.c
+mp2scan.o
+opdraw
+opgram.ml
+opgram.mli
+opgram.output
+oplex.ml
+sample.1
+sample.log
+sample.mp
+sample.mpx
+sample.mtx
+sample.pdf
+sample.png
+sample.tex

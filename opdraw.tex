@@ -1,0 +1,20 @@
+\catcode`@=11
+
+\font\tensc=cmcsci10
+\font\ninett=cmtt9
+\font\eighttt=cmtt8
+
+% \aftergroup nonsense so text doesn't have to be an argument of \node
+\def\node{$\bgroup\aftergroup$\nodestrut\let\next}
+
+\def\nodestrut{\vphantom(}
+
+\def\C#1{\hbox{\tensc \@cap#1\@cap\/}}
+\def\@cap#1#2\@cap{#1\lowercase{#2}}
+\def\S{\hbox\bgroup\catcode`\_=12 \tt\S@}
+\def\S@#1{#1\egroup}
+
+\def\inst#1{{\ninett\space #1\space}}
+\def\reg#1{{\eighttt\space #1\space}}
+
+\catcode`@=12
