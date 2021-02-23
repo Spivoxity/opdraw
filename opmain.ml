@@ -122,26 +122,35 @@ let rainbow = ref 0
 let colour () =
   let n = !rainbow in incr rainbow; n
 
+let cflag = ref false
+
 let rec make_tiles =
   function
       Tile (spec, inst, reg, t) ->
         make_tiles t;
-        let c = colour () in
+        let cmd =
+          if !cflag then sprintf "shade($)" [fNum (colour ())] else "draw" in
         begin match path t with
-            [n] -> printf "shade($) oval($);\n" [fNum c; fNum n]
-          | ns -> printf "shade($) chain($);\n" [fNum c; fList(fNum) ns]
+            [n] -> printf "$ oval($);\n" [fStr cmd; fNum n]
+          | ns -> printf "$ chain($);\n" [fStr cmd; fList(fNum) ns]
         end
     | Untile t ->
         make_tiles t
     | Node (_, _, kids) ->
         List.iter make_tiles kids
 
+let spec =
+  Arg.align [
+    "-c", Arg.Set cflag, " Colour the ovals"]
+
 let main () =
+  let fname = ref "-" in
+  Arg.parse spec (function s -> fname := s) "Usage:";
   let chan = 
-    if Array.length Sys.argv < 2 then
+    if !fname = "-" then
       stdin
     else begin
-      Oplex.fname := Sys.argv.(1);
+      Oplex.fname := !fname;
       open_in !Oplex.fname
     end in
   let lexbuf = Lexing.from_channel chan in
