@@ -84,7 +84,7 @@ enddef;
 
 vardef reg.lft(expr n)(text txt) =
   dotlabeldiam := 4pt;
-  if angle (direction 0 of lnk[n]) > -140:
+  if angle (direction 0 of lnk[n]) > -130:
     makelabel.lft(txt, z[n]);
   else:
     makelabel.ulft(txt, z[n]);
@@ -93,7 +93,7 @@ enddef;
 
 vardef reg.rt(expr n)(text txt) =
   dotlabeldiam := 4pt;
-  if angle (direction 0 of lnk[n]) < -40:
+  if angle (direction 0 of lnk[n]) < -50:
     makelabel.rt(txt, z[n]);
   else:
     makelabel.urt(txt, z[n]);
