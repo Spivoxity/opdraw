@@ -22,4 +22,6 @@ mpost $fname.mp
 
 pdftex $fname.tex
 
-convert -density $density -colorspace RGB $fname.pdf -flatten $fname.png
+# convert -density $density -colorspace RGB $fname.pdf -flatten $fname.png
+pdftocairo -singlefile -png -r $density $fname.pdf $fname
+pdftocairo -svg $fname.pdf $fname.svg

@@ -1,9 +1,9 @@
 # opdraw
-pdfTeX-based tool for rendering operator trees as PDF and PNG
+Tool based on MetaPost and pdfTeX for rendering operator trees as PDF and PNG
 
 This program, written in OCaml with a helper in C, takes a file containing a compact representation of a tiled operator tree and renders it as a diagram, with output as both a PDF file and a PNG file.  Operator trees are used in some compilers to represent statements in the body of a procedure, and instruction selection is implemented by covering each tree with tiles that correspond to machine instructions.
 
-<img src="sample.png" width=400/>
+<img src="image.svg" width=400/>
 
 The syntax of the input language is fairly easy to deduce from the OCamlYacc script for the parser, and the example shown above is provided in the file `sample.op`:
 ````
@@ -18,9 +18,9 @@ tile str <STOREW,
 ````
 You can write `<op, t1, t2>` for an (e.g., binary) node and `<op>` for a leaf, where `op` is an operator and `t1`, `t2` are subtrees.  Writing `tile inst reg t` shows `t` as tiled with instruction `inst` and register `reg`; the register is optional, and if it is omitted then the instruction is optional too.  The tile covers the part of `t` up to subtrees that are themselves tiled, or are marked with the `untile` command.  Though the input syntax allows arbitrary tiles, the layout mechanism chokes on any tile that does not follow a single path in the tree: i.e., any tiled node can have at most one child in the same tile.  You can write `tile.lft` and `tile.rt` and `tile.ulft`, etc., to affect the placement of labels in cases where the layout mechanism doesn't get it right.
 
-To work, the program needs both pdfTex (from TeX live) and imagemagick installed, and building it requires the OCaml compiler and also (for the helper) flex and bison.  Here's a suitable command to install the prerequisites under Debian:
+To work, the program needs both pdfTex (from TeX live) and Poppler installed, and building it requires the OCaml compiler and also (for the helper) flex and bison.  Here's a suitable command to install the prerequisites under Debian:
 ````
-sudo apt-get install texlive texlive-metapost imagemagick ghostscript ocaml-nox flex bison
+sudo apt-get install texlive texlive-metapost poppler-utils ocaml-nox flex bison
 ````
 When the tool is built, there's a shell script `script` that can be invoked as
 ````
@@ -33,9 +33,7 @@ The stages of conversion are as follows:
 2. Render the MetaPost program to Postscript.  This involves invoking TeX as a sub-process to typeset the labels. 
 3. Use the helper program `mp2pdf` to convert the MetaPost output into TeX input that will render as PDF.
 4. Invoke pdfTeX on the resulting file, giving the diagram in cropped PDF form.
-5. Use imagemagick to convert the PDF file into a PNG.
-
-The final stage, converting from PDF to PNG, requires PDF reading to be enabled in Imagemagick.  As root, edit the file `/etc/Imagemagick/policy.xml` and delete a group of lines near the bottom of the file that prevent the use of Ghostscript to decode images, leaving the closing tag on the very last line.  Those lines are there because of a bug in earlier versions of Ghostscript that has apparently been fixed now.
+5. Use pdftocairo from Poppler to convert the PDF file into a PNG and an SVG file.
 
 ## Files
 For the OP --> MetaPost translation
