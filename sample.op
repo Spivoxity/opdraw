@@ -1,8 +1,8 @@
-tile str <STOREW,
-  tile ldr u3 <LOADW,
+tile str <STOREW[1],
+  tile ldr u3 <LOADW[2],
     <OFFSET,
       tile set u0 <GLOBAL _a>,
-      tile lsl u2 <LSL,
+      untile <LSL,
         tile ldr u1 <LOADW, <LOCAL 40>>,
         <CONST 2>>>>,
   <LOCAL -8>>

@@ -5,7 +5,7 @@ This program, written in OCaml with a helper in C, takes a file containing a com
 
 <img src="image.svg" width=400/>
 
-The syntax of the input language is fairly easy to deduce from the OCamlYacc script for the parser, and the example shown above is provided in the file `sample.op`:
+The syntax of the input language is fairly easy to deduce from the OCamlYacc script for the parser, and the example shown above is produced from the following input.
 ````
 tile str <STOREW,
   tile ldr u3 <LOADW,
