@@ -4,8 +4,7 @@
 numeric gridx, gridy; gridx = gridy = 36pt;
 numeric odx, ody; odx = 6pt; ody = 12pt;
 numeric linkoff.l, linkoff.v, linkoff.r;
-linkoff.l = -0pt; linkoff.v = 0pt; linkoff.r = 0pt;
-
+linkoff.l = 0pt; linkoff.v = 0pt; linkoff.r = 0pt;
 numeric linkw; linkw = 24pt;
 
 vardef pale(expr c) = 0.2[white, c] enddef;
@@ -30,6 +29,8 @@ vardef node@#(expr x, y, p) =
   z.a@# = (x*gridx, y*gridy);
   z.a@#t-z.a@# = z.a@#-z.a@#b = (0,ody);
   z.a@#r-z.a@# = z.a@#-z.a@#l = (1/2 width p + odx,0);
+  z.a@#tr = (xpart z.a@#r, ypart z.a@#t);
+  z.a@#tl = (xpart z.a@#l, ypart z.a@#t);
   pic@# = p shifted (z.a@# - center p);
 enddef;
 
@@ -39,23 +40,24 @@ vardef link@#(suffix $, $$) =
   lnk$$ = z$$t .. z$$b cutbefore bbox pic$ cutafter bbox pic$$;
 enddef;
 
-vardef mypath@#(expr x)(text txt) =
-  z.a[x]@#{down}
-    for i=txt:
-      ..z[i]@#
-      ..z.a[i]@#{down}
-    endfor
+def tseg(expr x) =
+  z.a[x]r{up}..z.a[x]t{left}..z.a[x]l{down}
 enddef;
 
-vardef oval(expr x) =
-  z.a[x]t..z.a[x]l..z.a[x]b..z.a[x]r..cycle
+def lseg(expr x) =
+  z[x]l..z.a[x]l{down}
 enddef;
 
-vardef chain(expr x)(text txt) =
-  save y_;
-  for yy = txt: y_ := yy; endfor
-  z.a[x]t{left}..mypath.l(x, txt)..z.a[y_]b{right}
-    ..reverse mypath.r(x, txt)..cycle
+def rseg(expr x) =
+  z.a[x]r{up}..z[x]r
+enddef;
+
+def bseg(expr x) =
+  z.a[x]b
+enddef;
+
+def fillet(expr x, y) =
+  z.a[x]r{up}..1/2[z.a[x]tr, z.a[y]tl]{right}..z.a[y]l{down}
 enddef;
 
 vardef inst.lft(expr n)(text txt) =
@@ -106,4 +108,6 @@ def drawtree(expr n) =
   for i = 1 upto n: draw pic[i]; endfor
   pickup pencircle scaled 1.2;
   for i = 2 upto n: draw lnk[i]; endfor
+  % pickup pencircle scaled 2;
+  % for i = 2 upto n: drawdot z[i]; drawdot z[i]l; drawdot z[i]r; endfor
 enddef;

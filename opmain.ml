@@ -4,21 +4,9 @@
 open Print
 open Optree
 
-let fPair f1 f2 (x, y) = fMeta "($, $)" [f1 x; f2 y]
-
-let rec fTail(fmt) xs =
-  let g prf = List.iter (fun x -> prf ", $" [fmt x]) xs in fExt g
-
-let rec fTree = 
-  function
-      Tile (spec, inst, reg, t) -> fTree t
-    | Untile t -> fTree t
-    | Node (n, op, rands) -> fMeta "<$$>" [fStr op; fTail(fTree) rands]   
-
 let delta = Hashtbl.create 100
 
 let rec set_delta n d = 
-  printf "% delta $ = $\n" [fNum n; fFlo d];
   Hashtbl.add delta n d
 
 let rec find_gap p1 p2 =
@@ -47,9 +35,7 @@ let rec layout =
         let p1 = layout t1 and p2 = layout t2 in
         let d = find_gap p1 p2 /. 2.0 +. 1.0 in
         set_delta n d;
-        let res = (0.0, 0.0) :: join d p1 p2 in
-        printf "% layout $ = $\n" [fNum n; fList (fPair fFlo fFlo) res];
-        res
+        (0.0, 0.0) :: join d p1 p2
     | _ -> failwith "layout"   
 
 let rec make_nodes x y =
@@ -94,14 +80,18 @@ let decode spec dir =
 
 let rec make_labels dir =
   function
-      Tile (spec, inst, reg, (Node (n, _, _) as t)) ->
-        if inst <> "" then
-          printf "inst.$($)(btex \\inst{$} etex);\n" 
-            [fStr (decode spec dir); fNum n; fStr inst];
-        if reg <> "" then
-          printf "reg.$($)(btex \\reg{$} etex);\n" 
-            [fStr dir; fNum n; fStr reg];
-        make_labels dir t
+      Tile (spec, inst, reg, t) ->
+        make_labels dir t;
+        begin match t with
+            Node (n, _, _) ->
+              if inst <> "" then
+                printf "inst.$($)(btex \\inst{$} etex);\n" 
+                  [fStr (decode spec dir); fNum n; fStr inst];
+              if reg <> "" then
+                printf "reg.$($)(btex \\reg{$} etex);\n" 
+                  [fStr dir; fNum n; fStr reg]
+          | _ -> ()
+        end
     | Untile t ->
         make_labels dir t
     | Node (_, _, []) -> ()
@@ -109,16 +99,28 @@ let rec make_labels dir =
     | Node (_, _, [t1; t2]) -> make_labels "lft" t1; make_labels "rt" t2
     | _ -> failwith "make_labels"   
 
-let orphan = function Node _ -> false | _ -> true
-
-let rec path =
+let rec trace n =
   function
-      t when orphan t -> []
-    | Node (n, _, []) -> [n]
-    | Node (n, _, [t]) -> n :: path t
-    | Node (n, _, [t1; t2]) when orphan t1 -> n :: path t2
-    | Node (n, _, [t1; t2]) when orphan t2 -> n :: path t1
-    | _ -> failwith "non-linear tile not implemented"   
+    | [Node (k, _, kids)] ->
+        printf "..lseg($)" [fNum k];
+        trace k kids;
+        printf "..rseg($)" [fNum k]
+    | [Node (k1, _, kids1); Node (k2, _, kids2)] ->
+        printf "..lseg($)" [fNum k1];
+        trace k1 kids1;
+        printf "..fillet($,$)" [fNum k1; fNum k2];
+        trace k2 kids2;
+        printf "..rseg($)" [fNum k2]
+    | [Node (k1, _, kids1); _] ->
+        printf "..lseg($)" [fNum k1];
+        trace k1 kids1;
+        printf "..rseg($)" [fNum k1]
+    | [_; Node (k2, _, kids2)] ->
+        printf "..lseg($)" [fNum k2];
+        trace k2 kids2;
+        printf "..rseg($)" [fNum k2]
+    | [] | [_] | [_; _] -> printf " ..bseg($)" [fNum n]
+    | _ -> failwith "trace"
 
 let rainbow = ref 0
 
@@ -131,11 +133,14 @@ let rec make_tiles =
   function
       Tile (spec, inst, reg, t) ->
         make_tiles t;
-        let cmd =
-          if !cflag then sprintf "shade($)" [fNum (colour ())] else "draw" in
-        begin match path t with
-            [n] -> printf "$ oval($);\n" [fStr cmd; fNum n]
-          | ns -> printf "$ chain($);\n" [fStr cmd; fList(fNum) ns]
+        begin match t with
+            Node (n, _, kids) ->
+              if !cflag then printf "shade($) " [fNum (colour ())]
+              else printf "draw " [];
+              printf "tseg($)" [fNum n];
+              trace n kids;
+              printf "..cycle;\n" []
+          | _ -> ()
         end
     | Untile t ->
         make_tiles t
@@ -164,7 +169,6 @@ let main () =
 	fprintf stderr "\"$\", line $: syntax error at token '$'\n" 
 	  [fStr !Oplex.fname; fNum !Oplex.lnum; fStr tok];
 	exit 1 in
-  printf "% $\n" [fTree tree];
 
   printf "input opdraw.mp\n" [];
   printf "verbatimtex \\input opdraw.tex etex\n" [];
