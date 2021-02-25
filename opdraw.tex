@@ -3,12 +3,17 @@
 
 \catcode`@=11
 
+\newdimen\minw \minw=30pt
+
 \font\tensc=cmcsci10
 \font\ninett=cmtt9
 \font\eighttt=cmtt8
 
 % \aftergroup nonsense so text doesn't have to be an argument of \node
-\def\node{$\bgroup\aftergroup$\nodestrut\let\next}
+\def\node{\setbox0=\hbox\bgroup$\bgroup\aftergroup\nodei\nodestrut\let\next}
+\def\nodei{$\egroup
+  \ifdim\wd0<\minw \setbox0=\hbox to\minw{\hfil\unhbox0\hfil}\fi
+  \box0}
 
 \def\nodestrut{\vphantom(}
 

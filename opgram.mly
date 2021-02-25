@@ -7,6 +7,8 @@ open Print
 
 let add_tag base tag =
   sprintf "$^{[$]}" [fStr base; fStr tag]
+
+let nnodes = ref 0
 %}
 
 %token <string> OPEN IDENT TAG
@@ -15,11 +17,14 @@ let add_tag base tag =
 %token UNTILE
 %token BADTOK EOF
 
-%type<Optree.tree> tree
+%type<Optree.tree * int> file
 
-%start tree
+%start file
 
 %%
+
+file :
+    tree { ($1, !nnodes) } ;
 
 tree :
     TILE IDENT IDENT tree { Tile ($1, $2, $3, $4) }

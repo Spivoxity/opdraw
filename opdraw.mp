@@ -1,11 +1,12 @@
 % opdraw.mp
 % Copyright (c) 2021 J. M. Spivey
 
-numeric gridx, gridy; gridx = gridy = 36pt;
+numeric gridx, gridy; gridx = 72pt; gridy = 36pt;
 numeric odx, ody; odx = 6pt; ody = 12pt;
-numeric linkoff.l, linkoff.v, linkoff.r;
-linkoff.l = 0pt; linkoff.v = 0pt; linkoff.r = 0pt;
-numeric linkw; linkw = 24pt;
+numeric linkw; linkw = 20pt;
+numeric linkd; linkd = 1.2pt;
+numeric regdot; regdot = 4pt;
+numeric outline; outline = 0.4pt;
 
 vardef pale(expr c) = 0.2[white, c] enddef;
 
@@ -35,8 +36,8 @@ vardef node@#(expr x, y, p) =
 enddef;
 
 vardef link@#(suffix $, $$) =
-  z$$t = z.a$+(linkoff@#, 0); z$$ = 1/2[z$$t, z$$b]; z$$b=z.a$$;
-  penpos$$(linkw, 0);
+  z$$t = z.a$; z$$ = 1/2[z$$t, z$$b]; z$$b=z.a$$;
+  penpos$$(linkw, angle(z.a$-z.a$$)/6 - 15);
   lnk$$ = z$$t .. z$$b cutbefore bbox pic$ cutafter bbox pic$$;
 enddef;
 
@@ -58,6 +59,16 @@ enddef;
 
 def fillet(expr x, y) =
   z.a[x]r{up}..1/2[z.a[x]tr, z.a[y]tl]{right}..z.a[y]l{down}
+enddef;
+
+def leapfrog(expr x, y, w) =
+  z.a[y]r{up}..z[y].r
+  ..7/8[1/2[z.a[y]t,z.a[w]t],z.a[x]b]
+  ..z[w].l..z.a[w]l{down}
+enddef;
+
+vardef oval(expr x) =
+  z.a[x]t..z.a[x]l..z.a[x]b..z.a[x]r..cycle
 enddef;
 
 vardef inst.lft(expr n)(text txt) =
@@ -85,8 +96,8 @@ vardef inst.urt(expr n)(text txt) =
 enddef;
 
 vardef reg.lft(expr n)(text txt) =
-  dotlabeldiam := 4pt;
-  if angle (direction 0 of lnk[n]) > -130:
+  dotlabeldiam := regdot;
+  if angle (direction 0 of lnk[n]) > -140:
     makelabel.lft(txt, z[n]);
   else:
     makelabel.ulft(txt, z[n]);
@@ -94,20 +105,20 @@ vardef reg.lft(expr n)(text txt) =
 enddef;
 
 vardef reg.rt(expr n)(text txt) =
-  dotlabeldiam := 4pt;
-  if angle (direction 0 of lnk[n]) < -50:
+  dotlabeldiam := regdot;
+  if angle (direction 0 of lnk[n]) < -40:
     makelabel.rt(txt, z[n]);
   else:
     makelabel.urt(txt, z[n]);
   fi
 enddef;
 
-def begintree(expr n) = beginfig(n); picture pic[]; path lnk[]; enddef;
+def begintree(expr n) =
+  beginfig(n); picture pic[]; path lnk[];
+enddef;
 
 def drawtree(expr n) =
   for i = 1 upto n: draw pic[i]; endfor
-  pickup pencircle scaled 1.2;
+  pickup pencircle scaled linkd;
   for i = 2 upto n: draw lnk[i]; endfor
-  % pickup pencircle scaled 2;
-  % for i = 2 upto n: drawdot z[i]; drawdot z[i]l; drawdot z[i]r; endfor
 enddef;
